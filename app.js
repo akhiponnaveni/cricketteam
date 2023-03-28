@@ -5,7 +5,7 @@ const sqlite3 = require("sqlite3");
 
 const app = express();
 
-const dbpath = path.join(__dirname, "moviesData.db");
+const dbpath = path.join(__dirname, "cricketTeam.db");
 
 let db = null;
 const initilize = async () => {
@@ -43,4 +43,23 @@ app.get("/players/", async (request, response) => {
     )
   );
 });
+
+//post
+
+app.post("/players/", async (request, response) => {
+  const playerDetails = request.body;
+  const { playerName, jerseyNumber, role } = playerDetails;
+  const addPlayerQuery = `
+  INSERT INTO 
+  cricket_team(player_name, jersey_number, role)
+  values(
+      ${playerName},
+      ${jerseyNumber}, 
+      ${role}
+    ); `;
+
+  await db.run(addPlayerQuery);
+  response.send("Player Added to Team");
+});
+
 module.exports = app;
